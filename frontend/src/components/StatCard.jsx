@@ -4,7 +4,7 @@ export default function StatCard({ label, value, detail, icon, tone }) {
       <div className={`stat-icon ${tone}`} aria-hidden="true">{icon}</div>
       <div className="stat-copy">
         <p>{label}</p>
-        <strong>{value}</strong>
+        <span className="stat-value">{value}</span>
         <span>{detail}</span>
       </div>
     </article>

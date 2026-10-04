@@ -12,7 +12,7 @@ export function ErrorMessage({ children, onRetry }) {
     <div className="feedback-card error-card" role="alert">
       <span className="feedback-icon" aria-hidden="true">!</span>
       <div>
-        <strong>Something went wrong</strong>
+        <span className="feedback-title">Something went wrong</span>
         <p>{children}</p>
       </div>
       {onRetry && <button className="button button-outline button-small" onClick={onRetry}>Try again</button>}

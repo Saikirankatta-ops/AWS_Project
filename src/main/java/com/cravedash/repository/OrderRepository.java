@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.cravedash.model.Order;
 import com.cravedash.model.OrderStatusHistory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -38,12 +39,12 @@ public class OrderRepository {
     }
 
     public void save(Order order) {
-        redisTemplate.opsForValue().set(orderKey(order.orderId()), order);
+        redisTemplate.opsForValue().set(Objects.requireNonNull(orderKey(order.orderId())), order);
         redisTemplate.opsForSet().add(ORDER_IDS_KEY, order.orderId());
     }
 
     public Optional<Order> findById(String orderId) {
-        return Optional.ofNullable(redisTemplate.opsForValue().get(orderKey(orderId)))
+        return Optional.ofNullable(redisTemplate.opsForValue().get(Objects.requireNonNull(orderKey(orderId))))
                 .map(this::toOrder);
     }
 
@@ -61,11 +62,14 @@ public class OrderRepository {
     }
 
     public void appendHistory(String orderId, OrderStatusHistory history) {
-        redisTemplate.opsForList().rightPush(historyKey(orderId), history);
+        redisTemplate.opsForList().rightPush(
+                Objects.requireNonNull(historyKey(orderId)),
+                Objects.requireNonNull(history));
     }
 
     public List<OrderStatusHistory> findHistory(String orderId) {
-        List<Object> values = redisTemplate.opsForList().range(historyKey(orderId), 0, -1);
+        List<Object> values = redisTemplate.opsForList().range(
+                Objects.requireNonNull(historyKey(orderId)), 0, -1);
         if (values == null) {
             return List.of();
         }
@@ -88,16 +92,19 @@ public class OrderRepository {
 
     public boolean isConnected() {
         try {
-            return "PONG".equalsIgnoreCase(redisTemplate.getConnectionFactory().getConnection().ping());
+            return "PONG".equalsIgnoreCase(
+                    Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().ping());
         } catch (RuntimeException exception) {
             return false;
         }
     }
 
+    @NonNull
     private String orderKey(String orderId) {
         return ORDER_KEY_PREFIX + orderId;
     }
 
+    @NonNull
     private String historyKey(String orderId) {
         return orderKey(orderId) + HISTORY_KEY_SUFFIX;
     }

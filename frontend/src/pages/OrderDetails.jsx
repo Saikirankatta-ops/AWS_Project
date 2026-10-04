@@ -136,7 +136,7 @@ export default function OrderDetails() {
                       <li className="history-item" key={`${event.status}-${event.timestamp}-${index}`}>
                         <span className={`history-marker status-${String(event.status).toLowerCase()}`} aria-hidden="true">✓</span>
                         <div className="history-copy">
-                          <strong>{event.status?.replaceAll('_', ' ')}</strong>
+                          <span className="history-status">{event.status?.replaceAll('_', ' ')}</span>
                           <time dateTime={event.timestamp}>{formatDate(event.timestamp)}</time>
                         </div>
                       </li>

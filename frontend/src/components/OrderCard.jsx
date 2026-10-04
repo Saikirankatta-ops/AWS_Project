@@ -22,7 +22,7 @@ export default function OrderCard({ order }) {
         </div>
       </div>
       <div className="order-card-bottom">
-        <strong>{currency.format(Number(order.amount))}</strong>
+        <span className="order-value">{currency.format(Number(order.amount))}</span>
         <Link className="button button-outline button-small" to={`/orders/${encodeURIComponent(order.orderId)}`}>
           View Order <span aria-hidden="true">→</span>
         </Link>
